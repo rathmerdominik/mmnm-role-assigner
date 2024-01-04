@@ -62,6 +62,10 @@ public class CommonConfig {
 	private ForgeConfigSpec.LongValue revoChiefRoleId;
 	private ForgeConfigSpec.LongValue revoSupremeCommanderRoleId;
 
+	// Mink Sub Races
+	private ForgeConfigSpec.LongValue minkBunnyRoleId;
+	private ForgeConfigSpec.LongValue minkDogRoleId;
+	private ForgeConfigSpec.LongValue minkLionRoleId;
 
 	static {
 		Pair<CommonConfig, ForgeConfigSpec> pair = new ForgeConfigSpec.Builder().configure(CommonConfig::new);
@@ -83,14 +87,19 @@ public class CommonConfig {
 	}
 
 	public CommonConfig(ForgeConfigSpec.Builder builder) {
-		builder.comment("To disable a specific Role from syncing just do not change the ID on the config option");
+		builder.comment("To disable a specific stat from syncing just do not change the ID on the config option");
 
 		builder.push("Races");
-		
 		this.minkRoleId = builder.defineInRange("Mink Role Id", 0L, 0L, Long.MAX_VALUE);
 		this.cyborgRoleId = builder.defineInRange("Cyborg Role Id", 0L, 0L, Long.MAX_VALUE);
 		this.fishManRoleId = builder.defineInRange("Fishman Role Id", 0L, 0L, Long.MAX_VALUE);
 		this.humanRoleId = builder.defineInRange("Human Role Id", 0L, 0L, Long.MAX_VALUE);
+		builder.pop();
+
+		builder.push("Mink Sub Races");
+		this.minkBunnyRoleId = builder.defineInRange("Bunny Role Id", 0L, 0L, Long.MAX_VALUE);
+		this.minkDogRoleId = builder.defineInRange("Dog Role Id", 0L, 0L, Long.MAX_VALUE);
+		this.minkLionRoleId = builder.defineInRange("Lion Role Id", 0L, 0L, Long.MAX_VALUE);
 		builder.pop();
 
 		builder.push("Factions");
@@ -257,6 +266,20 @@ public class CommonConfig {
 		return revoSupremeCommanderRoleId.get();
 	}
 
+	// Mink Sub Race getters
+
+	public long getDogRoleId() {
+		return minkDogRoleId.get();
+	}
+
+	public long getBunnyRoleId() {
+		return minkBunnyRoleId.get();
+	}
+
+	public long getLionRoleId() {
+		return minkLionRoleId.get();
+	}
+
 	public List<Long> getAllRoleIds() {
 		return new ArrayList<>(Arrays.asList(
 				this.getMarineChoreBoyRoleId(),
@@ -287,8 +310,10 @@ public class CommonConfig {
 				this.getBountyHunterRoleId(),
 				this.getMarineRoleId(),
 				this.getPirateRoleId(),
-				this.getRevolutionArmyRoleId()
+				this.getRevolutionArmyRoleId(),
+				this.getBunnyRoleId(),
+				this.getDogRoleId(),
+				this.getLionRoleId()
 		));
 	}
-
 }

@@ -29,6 +29,7 @@ It synchronizes:
 - Fighting Style
 - Marine Rank
 - Revolutionary Rank
+- Mink Subrace
 
 
 # Config Options
@@ -44,6 +45,14 @@ It synchronizes:
     "Cyborg Role Id" = 0
     #Range: 0 ~ 9223372036854775807
     "Fishman Role Id" = 0
+
+[Mink Sub Races]
+    #Range: 0 ~ 9223372036854775807
+    "Bunny Role Id" = 0
+    #Range: 0 ~ 9223372036854775807
+    "Dog Role Id" = 0
+    #Range: 0 ~ 9223372036854775807
+    "Lion Role Id" = 0
 
 [Factions]
     #Range: 0 ~ 9223372036854775807

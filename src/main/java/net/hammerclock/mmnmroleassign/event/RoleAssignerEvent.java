@@ -115,6 +115,15 @@ public class RoleAssignerEvent {
 			if(raceRoleId != 0L) {
 				LOGGER.debug("Adding Race Role {} to roles", raceRoleId);
 				roles.add(member.getGuild().getRoleById(raceRoleId));
+
+			}
+
+			if(entityStats.getRace().equals(ModValues.MINK)){
+				Long minkSubRaceRoleId = getMinkSubRaceRoleId(entityStats.getSubRace());
+				if(minkSubRaceRoleId != null) {
+					LOGGER.debug("Adding Mink Sub Race Role to roles");
+					roles.add(member.getGuild().getRoleById(minkSubRaceRoleId));
+				}
 			}
 
 			Long fightingStyleRoleId = getFightingStyleRoleId(entityStats.getFightingStyle());
@@ -184,6 +193,22 @@ public class RoleAssignerEvent {
 				return CONFIG.getMinkRoleId();
 			default:
 				LOGGER.debug("Found no RoleID for Race {}", race);
+				return 0L;
+		}
+	}
+
+	public static Long getMinkSubRaceRoleId(String minkType) {
+		switch (minkType) {
+			case ModValues.MINK_BUNNY:
+				LOGGER.debug("Getting RoleID for Mink Bunny");
+				return CONFIG.getBunnyRoleId();
+			case ModValues.MINK_DOG:
+				LOGGER.debug("Getting RoleID for Mink Bunny");
+				return CONFIG.getDogRoleId();
+			case ModValues.MINK_LION:
+				LOGGER.debug("Getting RoleID for Mink Bunny");
+				return CONFIG.getLionRoleId();
+			default:
 				return 0L;
 		}
 	}
