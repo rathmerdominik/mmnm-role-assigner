@@ -210,7 +210,7 @@ modrinth {
     gameVersions = ["${minecraft_version}"]
     changelog = "${modrinth_changelog}"
     dependencies {
-        required.project "playerrevive"
+        required.project "dcintegration"
         required.project "mine-mine-no-mi"
     }
     syncBodyFrom = rootProject.file("README_MODRINTH.md").text
