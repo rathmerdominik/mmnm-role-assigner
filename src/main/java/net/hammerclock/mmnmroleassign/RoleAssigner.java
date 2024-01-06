@@ -4,7 +4,11 @@ import net.hammerclock.mmnmroleassign.config.CommonConfig;
 
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.ExtensionPoint;
+import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.ModLoadingContext;
+import net.minecraftforge.fml.VersionChecker;
+import net.minecraftforge.fml.VersionChecker.CheckResult;
+import net.minecraftforge.fml.VersionChecker.Status;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.server.FMLServerStartedEvent;
 import net.minecraftforge.fml.config.ModConfig.Type;
@@ -33,6 +37,10 @@ public class RoleAssigner {
 	}
 
 	private static void onServerStarted(FMLServerStartedEvent event) {
+		CheckResult result = VersionChecker.getResult(ModList.get().getModContainerById(PROJECT_ID).orElseThrow(IllegalArgumentException::new).getModInfo());
+		if(result.status == Status.OUTDATED) {
+			LOGGER.warn("YOUR MOD IS OUTDATED. The latest version is {}. Please get the latest version here: {}", result.target, result.url);
+		}
 		LOGGER.info("Role Assigner Started!");
 	}
 }
