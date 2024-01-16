@@ -3,16 +3,10 @@
 In order for the addon to work several changes to the main Mine Mine no Mi mod had to be made.  
 Those changes have already been committed by me to the main mod and will be available with the next Mine Mine no Mi update.  
 Specifics can be found [here](https://github.com/rathmerdominik/mine-mine-no-mi-modded).  
+#### Download the mod file directly [here](https://github.com/rathmerdominik/mine-mine-no-mi-modded/raw/main/release/mine-mine-no-mi-1.16.5-0.9.5-HAMMER.jar) 
 
 It is imperative that for now this custom version is used. Changes in there are purely server sided. So only you need to install this version on your server.  
 Players can still use the normal Mine Mine no Mi Version.
-
-I HAVE EXPLICIT PERMISSION BY THE CREATOR OF THE MINE MINE NO MI MOD TO REDISTRIBUTE THIS.  
-YOU DO NOT! THEREFORE EVERY FURTHER REDISTRIBUTION HAS TO HAPPEN BY REFERENCING TO THIS PAGE!
-
-!!! A bit of competency is required to use this mod !!!  
-Do not be illiterate.  
-Read the instructions!
 
 ---
 
