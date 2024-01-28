@@ -32,11 +32,12 @@ jobs:
     - name: Extract tag information
       id: tag_info
       run: |
-        TAG_NAME=${GITHUB_REF#refs/tags/}
         TAG_INFO=($(echo $GITHUB_REF | sed 's|refs/tags/||' | tr '-' ' '))
         echo "VERSION_TYPE=${TAG_INFO[2]}" >> $GITHUB_ENV
-        echo "CHANGELOG_MESSAGE=${TAG_INFO[@]:2}" >> $GITHUB_ENV
         echo "CHANGELOG_TYPE=${TAG_INFO[1]}" >> $GITHUB_ENV
+
+        git fetch --depth=1 origin +refs/tags/*:refs/tags/*
+        echo "CHANGELOG_MESSAGE=$(git tag -l --format='%(contents:subject)' ${GITHUB_REF#refs/*/})" >> $GITHUB_ENV
     
     - name: Get dependencies
       run: |
