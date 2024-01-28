@@ -50,7 +50,6 @@ public class RoleAssignerEvent {
 			IEntityStats entityStats = EntityStatsCapability.get(event.getPlayer());
 
 			List<Role> roles = assembleRoles(entityStats, member);
-			LOGGER.debug("Setting roles for {}", member.getEffectiveName());
 			member.getGuild().modifyMemberRoles(member, roles).queue();
 		}
 	}
@@ -108,28 +107,28 @@ public class RoleAssignerEvent {
 			Long factionRoleId = getFactionRoleId(entityStats.getFaction());
 			if(factionRoleId != 0L) {
 				LOGGER.debug("Adding Faction Role {} to roles", factionRoleId);
-				roles.add(member.getGuild().getRoleById(factionRoleId));
+				getRoleOrError(factionRoleId, member).ifPresent(context -> roles.add(member.getGuild().getRoleById(factionRoleId)));
 			}
 
 			Long raceRoleId = getRaceRoleId(entityStats.getRace());
 			if(raceRoleId != 0L) {
 				LOGGER.debug("Adding Race Role {} to roles", raceRoleId);
-				roles.add(member.getGuild().getRoleById(raceRoleId));
+				getRoleOrError(raceRoleId, member).ifPresent(context -> roles.add(member.getGuild().getRoleById(raceRoleId)));
 
 			}
 
 			if(entityStats.getRace().equals(ModValues.MINK)){
 				Long minkSubRaceRoleId = getMinkSubRaceRoleId(entityStats.getSubRace());
-				if(minkSubRaceRoleId != null) {
+				if(minkSubRaceRoleId != 0L) {
 					LOGGER.debug("Adding Mink Sub Race Role to roles");
-					roles.add(member.getGuild().getRoleById(minkSubRaceRoleId));
+					getRoleOrError(minkSubRaceRoleId, member).ifPresent(context -> roles.add(member.getGuild().getRoleById(minkSubRaceRoleId)));
 				}
 			}
 
 			Long fightingStyleRoleId = getFightingStyleRoleId(entityStats.getFightingStyle());
 			if(fightingStyleRoleId != 0L) {
 				LOGGER.debug("Adding Fighting Style Role {} to roles", fightingStyleRoleId);
-				roles.add(member.getGuild().getRoleById(fightingStyleRoleId));
+				getRoleOrError(fightingStyleRoleId, member).ifPresent(context -> roles.add(member.getGuild().getRoleById(fightingStyleRoleId)));
 			}
 
 			LOGGER.debug("Faction check on {} returned {}", member.getEffectiveName(), entityStats.getFaction());
@@ -137,7 +136,7 @@ public class RoleAssignerEvent {
 				Long marineRankRoleId = getMarineRankRoleId(entityStats);
 				if(marineRankRoleId != 0L) {
 					LOGGER.debug("Adding Marine Rank Role {} to roles", marineRankRoleId);
-					roles.add(member.getGuild().getRoleById(marineRankRoleId));
+					getRoleOrError(marineRankRoleId, member).ifPresent(context -> roles.add(member.getGuild().getRoleById(marineRankRoleId)));
 				}
 			} 
 			
@@ -145,7 +144,7 @@ public class RoleAssignerEvent {
 				Long revoRankRoleId = getRevoRankRoleId(entityStats);
 				if(revoRankRoleId != 0L) {
 					LOGGER.debug("Adding Revo Rank Role {} to roles", revoRankRoleId);
-					roles.add(member.getGuild().getRoleById(revoRankRoleId));
+					getRoleOrError(revoRankRoleId, member).ifPresent(context -> roles.add(member.getGuild().getRoleById(revoRankRoleId)));
 				}
 			}
 
@@ -155,6 +154,15 @@ public class RoleAssignerEvent {
 			LOGGER.error(e.getMessage());
 		}
 		return roles;
+	}
+
+	public static Optional<Role> getRoleOrError(Long roleId, Member member) {
+		Role role = member.getGuild().getRoleById(roleId);
+		if(role == null) {
+			LOGGER.error("Role with ID {} could not be found! Check if the ID is still correct in your config", roleId);
+			return Optional.empty();
+		}
+		return Optional.of(role);
 	}
 
 	public static Long getFactionRoleId(String faction) {
