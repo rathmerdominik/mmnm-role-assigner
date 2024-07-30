@@ -34,7 +34,8 @@ public class RoleAssignerEvent {
 	private static final Logger LOGGER = LogManager.getLogger(RoleAssigner.PROJECT_ID);
 	public static final CommonConfig CONFIG = CommonConfig.INSTANCE;
 
-	// This acts as a kind of failsafe. Everyone who has worked with Discord bots knows that they can be very unreliable.
+	// This acts as a kind of failsafe. Everyone who has worked with Discord bots
+	// knows that they can be very unreliable.
 	@SubscribeEvent
 	public static void onPlayerJoin(PlayerEvent.PlayerLoggedInEvent event) {
 		Optional<PlayerLink> playerLink = getOrWarnPlayerLink(event.getPlayer().getUUID());
@@ -42,7 +43,7 @@ public class RoleAssignerEvent {
 			LOGGER.debug("Playerjoin detail set for {}", event.getPlayer().getName().getString());
 			Member member = DiscordIntegration.INSTANCE.getMemberById(playerLink.get().discordID);
 
-			if(member == null) {
+			if (member == null) {
 				LOGGER.warn("Member with Discord ID {} could not be found. Unlinking.", playerLink.get().discordID);
 				LinkManager.unlinkPlayer(playerLink.get().discordID);
 				return;
@@ -61,7 +62,7 @@ public class RoleAssignerEvent {
 			LOGGER.debug("Details set for player {}", event.getPlayer().getName().getString());
 			Member member = DiscordIntegration.INSTANCE.getMemberById(playerLink.get().discordID);
 
-			if(member == null) {
+			if (member == null) {
 				LOGGER.warn("Member with Discord ID {} could not be found. Unlinking.", playerLink.get().discordID);
 				LinkManager.unlinkPlayer(playerLink.get().discordID);
 				return;
@@ -78,10 +79,11 @@ public class RoleAssignerEvent {
 	public static void onLoyaltyChange(LoyaltyEvent.Post event) {
 		Optional<PlayerLink> playerLink = getOrWarnPlayerLink(event.getPlayer().getUUID());
 		if (playerLink.isPresent()) {
-			LOGGER.debug("Loyalty changed for player {} to {}", event.getPlayer().getName().getString(), event.getLoyalty());
+			LOGGER.debug("Loyalty changed for player {} to {}", event.getPlayer().getName().getString(),
+					event.getLoyalty());
 			Member member = DiscordIntegration.INSTANCE.getMemberById(playerLink.get().discordID);
 
-			if(member == null) {
+			if (member == null) {
 				LOGGER.warn("Member with Discord ID {} could not be found. Unlinking.", playerLink.get().discordID);
 				LinkManager.unlinkPlayer(playerLink.get().discordID);
 				return;
@@ -97,7 +99,7 @@ public class RoleAssignerEvent {
 	public static List<Role> assembleRoles(IEntityStats entityStats, Member member) {
 		List<Role> roles = new ArrayList<>();
 		member.getRoles().forEach((Role role) -> {
-			if(!CONFIG.getAllRoleIds().contains(role.getIdLong())) {
+			if (!CONFIG.getAllRoleIds().contains(role.getIdLong())) {
 				LOGGER.debug("Adding Pre-Existing Role {} to roles", role.getIdLong());
 				roles.add(role);
 			}
@@ -105,46 +107,52 @@ public class RoleAssignerEvent {
 
 		try {
 			Long factionRoleId = getFactionRoleId(entityStats.getFaction());
-			if(factionRoleId != 0L) {
+			if (factionRoleId != 0L) {
 				LOGGER.debug("Adding Faction Role {} to roles", factionRoleId);
-				getRoleOrError(factionRoleId, member).ifPresent(context -> roles.add(member.getGuild().getRoleById(factionRoleId)));
+				getRoleOrError(factionRoleId, member)
+						.ifPresent(context -> roles.add(member.getGuild().getRoleById(factionRoleId)));
 			}
 
 			Long raceRoleId = getRaceRoleId(entityStats.getRace());
-			if(raceRoleId != 0L) {
+			if (raceRoleId != 0L) {
 				LOGGER.debug("Adding Race Role {} to roles", raceRoleId);
-				getRoleOrError(raceRoleId, member).ifPresent(context -> roles.add(member.getGuild().getRoleById(raceRoleId)));
+				getRoleOrError(raceRoleId, member)
+						.ifPresent(context -> roles.add(member.getGuild().getRoleById(raceRoleId)));
 
 			}
 
-			if(entityStats.getRace().equals(ModValues.MINK)){
+			if (entityStats.getRace().equals(ModValues.MINK)) {
 				Long minkSubRaceRoleId = getMinkSubRaceRoleId(entityStats.getSubRace());
-				if(minkSubRaceRoleId != 0L) {
+				if (minkSubRaceRoleId != 0L) {
 					LOGGER.debug("Adding Mink Sub Race Role to roles");
-					getRoleOrError(minkSubRaceRoleId, member).ifPresent(context -> roles.add(member.getGuild().getRoleById(minkSubRaceRoleId)));
+					getRoleOrError(minkSubRaceRoleId, member)
+							.ifPresent(context -> roles.add(member.getGuild().getRoleById(minkSubRaceRoleId)));
 				}
 			}
 
 			Long fightingStyleRoleId = getFightingStyleRoleId(entityStats.getFightingStyle());
-			if(fightingStyleRoleId != 0L) {
+			if (fightingStyleRoleId != 0L) {
 				LOGGER.debug("Adding Fighting Style Role {} to roles", fightingStyleRoleId);
-				getRoleOrError(fightingStyleRoleId, member).ifPresent(context -> roles.add(member.getGuild().getRoleById(fightingStyleRoleId)));
+				getRoleOrError(fightingStyleRoleId, member)
+						.ifPresent(context -> roles.add(member.getGuild().getRoleById(fightingStyleRoleId)));
 			}
 
 			LOGGER.debug("Faction check on {} returned {}", member.getEffectiveName(), entityStats.getFaction());
-			if(entityStats.getFaction().equals(ModValues.MARINE)) {
+			if (entityStats.getFaction().equals(ModValues.MARINE)) {
 				Long marineRankRoleId = getMarineRankRoleId(entityStats);
-				if(marineRankRoleId != 0L) {
+				if (marineRankRoleId != 0L) {
 					LOGGER.debug("Adding Marine Rank Role {} to roles", marineRankRoleId);
-					getRoleOrError(marineRankRoleId, member).ifPresent(context -> roles.add(member.getGuild().getRoleById(marineRankRoleId)));
+					getRoleOrError(marineRankRoleId, member)
+							.ifPresent(context -> roles.add(member.getGuild().getRoleById(marineRankRoleId)));
 				}
-			} 
-			
-			if(entityStats.getFaction().equals(ModValues.REVOLUTIONARY)) {
+			}
+
+			if (entityStats.getFaction().equals(ModValues.REVOLUTIONARY)) {
 				Long revoRankRoleId = getRevoRankRoleId(entityStats);
-				if(revoRankRoleId != 0L) {
+				if (revoRankRoleId != 0L) {
 					LOGGER.debug("Adding Revo Rank Role {} to roles", revoRankRoleId);
-					getRoleOrError(revoRankRoleId, member).ifPresent(context -> roles.add(member.getGuild().getRoleById(revoRankRoleId)));
+					getRoleOrError(revoRankRoleId, member)
+							.ifPresent(context -> roles.add(member.getGuild().getRoleById(revoRankRoleId)));
 				}
 			}
 
@@ -158,7 +166,7 @@ public class RoleAssignerEvent {
 
 	public static Optional<Role> getRoleOrError(Long roleId, Member member) {
 		Role role = member.getGuild().getRoleById(roleId);
-		if(role == null) {
+		if (role == null) {
 			LOGGER.error("Role with ID {} could not be found! Check if the ID is still correct in your config", roleId);
 			return Optional.empty();
 		}
@@ -313,9 +321,8 @@ public class RoleAssignerEvent {
 			return Optional.of(LinkManager.getLink(null, uuid));
 		} else {
 			LOGGER.warn(
-				"User with the UUID {} is not Linked! Consider enforcing linking in Discord Integration's Config. Cannot set Roles!",
-					uuid
-				);
+					"User with the UUID {} is not Linked! Consider enforcing linking in Discord Integration's Config. Cannot set Roles!",
+					uuid);
 		}
 		return Optional.empty();
 	}
