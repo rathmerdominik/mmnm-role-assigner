@@ -38,12 +38,6 @@ jobs:
 
         git fetch --depth=1 origin +refs/tags/*:refs/tags/*
         echo "CHANGELOG_MESSAGE=$(git tag -l --format='%(contents:subject)' ${GITHUB_REF#refs/*/})" >> $GITHUB_ENV
-    
-    - name: Get dependencies
-      run: |
-        cd libs
-        curl -LO https://github.com/rathmerdominik/mine-mine-no-mi-modded/raw/main/release/mine-mine-no-mi-1.16.5-0.9.5-HAMMER.jar
-        cd ..
 
     - name: Run ./gradlew updateInformation
       run: |
